@@ -1,13 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Codedeploy email
+
+env:
+  ARTIFACT_NAME: sendVerifyEmail.zip
+  AWS_REGION: us-east-1
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -16,21 +18,45 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  Lambda:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.x']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Python ${{ matrix.python-version }} sample
+        uses: actions/setup-python@v2
+        with: 
+          python-version: ${{ matrix.python-version }}
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Install dependencies
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          sudo apt-get update && sudo apt-get install -y zip unzip
+          sudo python -m pip install boto3
+          sudo pip install python-dotenv
+
+      - name: Build Deployment Artifact
+        run: |
+          touch .env
+          echo 'DOMAIN='${{ secrets.DOMAIN }}'' >> .env
+          cat .env
+          zip -r ${{ env.ARTIFACT_NAME }} sendVerifyEmail.py .env
+      - name: Configuring AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Copy Artifact to S3
+        run: |
+          aws s3 cp ${{ env.ARTIFACT_NAME }} s3://${{ secrets.LAMBDA_BUCKET }}/${{ env.ARTIFACT_NAME }}
+      - name: Call to Lambda for Updating Function
+        run: |
+          aws lambda update-function-code --function-name lambda_email_updates --region us-east-1 --zip-file fileb://${{ env.ARTIFACT_NAME }}
