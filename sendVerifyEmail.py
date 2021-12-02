@@ -11,6 +11,7 @@ def lambda_handler(event, context):
     print("event>>>",type(event))
     message = event['Records'][0]['Sns']['Message']
     print("From SNS: " + message)
+    print("message>>>",type(message))
     sendEmail(message)
     return message
 
