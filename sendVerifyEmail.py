@@ -1,6 +1,6 @@
+from __future__ import print_function
 import boto3
 from botocore.exceptions import ClientError
-from __future__ import print_function
 import json
 
 print('Loading function')
