@@ -36,8 +36,8 @@ def sendEmail(message):
     # The email body for recipients with non-HTML email clients.
     BODY_TEXT = ("Hello\r\n"
                 "We just need to verify your email address before you can access the application"
-                "CLink the below link to verify your account"
-                "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+message['token']
+                "CLink the below link to verify your account"+
+                url
                 )
             
     # The HTML body of the email.
@@ -47,7 +47,7 @@ def sendEmail(message):
     <h2>Verify Account</h2>
     <p>"We just need to verify your email address before you can access the application"</p>
     <p>Kindly, Click the below link to verify your account
-        <a href=''>
+        <a href='"""+url+"""'>
         """+url+"""</a>.</p>
     </body>
     </html>
