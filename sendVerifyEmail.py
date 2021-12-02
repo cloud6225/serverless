@@ -7,6 +7,8 @@ print('Loading function')
 
 def lambda_handler(event, context):
     #print("Received event: " + json.dumps(event, indent=2))
+    print("yoo>>>",event)
+    print("event>>>",type(event))
     message = event['Records'][0]['Sns']['Message']
     print("From SNS: " + message)
     sendEmail(message)
