@@ -22,7 +22,7 @@ def sendEmail(message):
 
     # Replace recipient@example.com with a "To" address. If your account 
     # is still in the sandbox, this address must be verified.
-    RECIPIENT = message.email
+    RECIPIENT = message['email']
 
     # If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
     AWS_REGION = "us-east-1"
@@ -30,13 +30,13 @@ def sendEmail(message):
     # The subject line for the email.
     SUBJECT = "Account Verification Email"
 
-    url = "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+ message.token
+    url = "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+ message['token']
 
     # The email body for recipients with non-HTML email clients.
     BODY_TEXT = ("Hello\r\n"
                 "We just need to verify your email address before you can access the application"
                 "CLink the below link to verify your account"
-                "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+message.token
+                "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+message['token']
                 )
             
     # The HTML body of the email.
@@ -47,7 +47,7 @@ def sendEmail(message):
     <p>"We just need to verify your email address before you can access the application"</p>
     <p>Kindly, Click the below link to verify your account
         <a href=''>
-        "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+ message.token</a>.</p>
+        """+url+"""</a>.</p>
     </body>
     </html>
                 """            
