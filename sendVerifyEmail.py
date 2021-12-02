@@ -17,7 +17,7 @@ def lambda_handler(event, context):
 
 
 def sendEmail(message):    
-
+    message = json.loads(message)
     # This address must be verified with Amazon SES.
     SENDER = "noreply@prod.mrudulladhwe.me"
 
