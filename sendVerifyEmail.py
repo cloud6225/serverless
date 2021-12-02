@@ -31,7 +31,7 @@ def sendEmail(message):
     # The subject line for the email.
     SUBJECT = "Account Verification Email"
 
-    url = "http://prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+ message['token']
+    url = "http://api.prod.mrudulladhwe.me/v1/verifyUserEmail?email="+RECIPIENT+"&token="+ message['token']
 
     # The email body for recipients with non-HTML email clients.
     BODY_TEXT = ("Hello\r\n"
