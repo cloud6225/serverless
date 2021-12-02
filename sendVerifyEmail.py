@@ -47,7 +47,7 @@ def sendEmail(message):
     <h2>Verify Account</h2>
     <p>"We just need to verify your email address before you can access the application"</p>
     <p>Kindly, Click the below link to verify your account
-        <a href='"""+url+"""'>
+        <a href=''>
         """+url+"""</a>.</p>
     </body>
     </html>
